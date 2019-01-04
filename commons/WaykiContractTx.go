@@ -14,13 +14,18 @@ type WaykiContractTxParams struct {
 }
 
 func (waykiContract WaykiContractTxParams)SignTX()string{
-	regId:=parseRegId(waykiContract.RegId)
+	srcId:=parseRegId(waykiContract.RegId)
+	destId:=parseRegId(waykiContract.Appid)
 	bytesBuffer := bytes.NewBuffer([]byte{})
 	bytesBuffer.WriteByte(byte(waykiContract.TxType))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Version))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.ValidHeight))
-	bytesBuffer.Write(EncodeInOldWay(regId[0]))
-	bytesBuffer.Write(EncodeInOldWay(regId[1]))
+	bytesBuffer.Write(EncodeInOldWay(4))
+	bytesBuffer.Write(EncodeInOldWay(srcId[0]))
+	bytesBuffer.Write(EncodeInOldWay(srcId[1]))
+	bytesBuffer.Write(EncodeInOldWay(4))
+	bytesBuffer.Write(EncodeInOldWay(destId[0]))
+	bytesBuffer.Write(EncodeInOldWay(destId[1]))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Fees))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Value))
 	bytesBuffer.Write(EncodeInOldWay(int64(len(waykiContract.ContractBytes))))
@@ -33,13 +38,18 @@ func (waykiContract WaykiContractTxParams)SignTX()string{
 }
 
 func signContractTX(waykiContract WaykiContractTxParams) []byte{
-	regId:=parseRegId(waykiContract.RegId)
+	srcId:=parseRegId(waykiContract.RegId)
+	destId:=parseRegId(waykiContract.Appid)
 	bytesBuffer := bytes.NewBuffer([]byte{})
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Version))
 	bytesBuffer.WriteByte(byte(waykiContract.TxType))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.ValidHeight))
-	bytesBuffer.Write(EncodeInOldWay(regId[0]))
-	bytesBuffer.Write(EncodeInOldWay(regId[1]))
+	bytesBuffer.Write(EncodeInOldWay(4))
+	bytesBuffer.Write(EncodeInOldWay(srcId[0]))
+	bytesBuffer.Write(EncodeInOldWay(srcId[1]))
+	bytesBuffer.Write(EncodeInOldWay(4))
+	bytesBuffer.Write(EncodeInOldWay(destId[0]))
+	bytesBuffer.Write(EncodeInOldWay(destId[1]))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Fees))
 	bytesBuffer.Write(EncodeInOldWay(waykiContract.Value))
 	bytesBuffer.Write(EncodeInOldWay(int64(len(waykiContract.ContractBytes))))

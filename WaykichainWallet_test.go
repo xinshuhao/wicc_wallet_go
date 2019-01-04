@@ -28,12 +28,15 @@ func TestMnemonicWIF(t *testing.T) {
 func TestSignContractTx(t *testing.T) {
 	var waykiContract commons.WaykiContractTxParams
 	waykiContract.Value=10000
-	waykiContract.BaseSignTxParams.PrivateKey="Y9XMqNzseQFSK32SvMDNF9J7xz1CQmHRsmY1hMYiqZyTck8pYae3"
-	waykiContract.BaseSignTxParams.RegId="30947-1"
-	waykiContract.BaseSignTxParams.ValidHeight=662788
-	waykiContract.BaseSignTxParams.Fees=10000
-	waykiContract.BaseSignTxParams.TxType=commons.TX_COMMON
+	waykiContract.BaseSignTxParams.PrivateKey="YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
+	waykiContract.BaseSignTxParams.RegId="25312-1"
+	waykiContract.Appid="470867-1"
+	waykiContract.BaseSignTxParams.ValidHeight=670532
+	waykiContract.BaseSignTxParams.Fees=100000
+	waykiContract.BaseSignTxParams.TxType=commons.TX_CONTRACT
 	waykiContract.BaseSignTxParams.Version=1
+	binary,_:=hex.DecodeString("f0140000151d000000000000151d000000000000")
+	waykiContract.ContractBytes= []byte(binary)
 	hash:=waykiContract.SignTX()
 	println(hash)
 }

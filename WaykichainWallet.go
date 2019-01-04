@@ -2,10 +2,11 @@ package wiccwallet
 
 import (
 	"wiccwallet/commons"
+	"encoding/hex"
 )
 
-const WAYKI_TESTNET int = 1
-const WAYKI_MAINTNET int = 2
+const WAYKI_TESTNET commons.Network = 1
+const WAYKI_MAINTNET commons.Network = 2
 
 //创建助记词
 func CreateMnemonics() (string){
@@ -18,19 +19,19 @@ func CreateMnemonics() (string){
 }
 
 //助记词转换地址
-func Mnemonic2Address(words string,netType int)(string){
+func Mnemonic2Address(words string,netType commons.Network)(string){
 	address := commons.GenerateAddress(words,netType)
 	return address
 }
 
 //助记词转私钥
-func Mnemonic2PrivateKey(words string,netType int)(string){
+func Mnemonic2PrivateKey(words string,netType  commons.Network)(string){
 	privateKey := commons.GeneratePrivateKey(words,netType)
 	return privateKey
 }
 
 //私钥转地址
-func PrivateKey2Address(words string,netType int)(string){
+func PrivateKey2Address(words string,netType  commons.Network)(string){
 	address := commons.ImportPrivateKey(words,netType)
 	return address
 }
@@ -64,7 +65,7 @@ func SignCommonTx(value int64,regid string,toAddr string,height int64, fees int6
 }
 
 //投票交易签名
-func SignDelegateTx(regid string,height int64, fees int64,privateKey string,str string) string {
+func SignDelegateTx(regid string,height int64, fees int64,privateKey string,votes []commons.OperVoteFund) string {
 	var waykiDelegate commons.WaykiDelegateTxParams
 	waykiDelegate.BaseSignTxParams.PrivateKey=privateKey
 	waykiDelegate.BaseSignTxParams.RegId=regid
@@ -72,14 +73,26 @@ func SignDelegateTx(regid string,height int64, fees int64,privateKey string,str 
 	waykiDelegate.BaseSignTxParams.Fees=fees
 	waykiDelegate.BaseSignTxParams.TxType=commons.TX_DELEGATE
 	waykiDelegate.BaseSignTxParams.Version=1
-
-	//delegateList:=[]commons.OperVoteFund{commons.OperVoteFund{
-	//	commons.MINUS_FUND,pubKeyList[0],10000,
-	//}}
-	//waykiDelegate.OperVoteFunds=delegateList
+	waykiDelegate.OperVoteFunds=votes
 	hash:=waykiDelegate.SignTX()
 	return hash
 }
 
+//智能合约交易签名
+func SignContractTx(value int64,height int64, fees int64,privateKey string,regId string,appid string,contractStr string) string {
+	var waykiContract commons.WaykiContractTxParams
+	waykiContract.Value=value
+	waykiContract.BaseSignTxParams.PrivateKey=privateKey
+	waykiContract.BaseSignTxParams.RegId=regId
+	waykiContract.Appid=appid
+	waykiContract.BaseSignTxParams.ValidHeight=height
+	waykiContract.BaseSignTxParams.Fees=fees
+	waykiContract.BaseSignTxParams.TxType=commons.TX_CONTRACT
+	waykiContract.BaseSignTxParams.Version=1
+	binary,_:=hex.DecodeString(contractStr)
+	waykiContract.ContractBytes= []byte(binary)
+	hash:=waykiContract.SignTX()
+	return hash
+}
 
 

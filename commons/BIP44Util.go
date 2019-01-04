@@ -7,7 +7,7 @@ import (
 )
 
 
-func GenerateAddress(words string, net int)  string {
+func GenerateAddress(words string, net Network)  string {
 	wallet, err := CreateWalletFromMnemonic(words, DefaultSeedPass)
 	if (err != nil) {
 		fmt.Errorf("invalid mnemonic")
@@ -43,7 +43,7 @@ func GenerateAddress(words string, net int)  string {
 	return address.String()
 }
 
-func GeneratePrivateKey(words string ,net int) string{
+func GeneratePrivateKey(words string ,net Network) string{
 	wallet, err := CreateWalletFromMnemonic(words, DefaultSeedPass)
 	if (err != nil) {
 		fmt.Errorf("invalid mnemonic")

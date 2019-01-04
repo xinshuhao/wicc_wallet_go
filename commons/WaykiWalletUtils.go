@@ -5,7 +5,7 @@ import (
 	"github.com/btcsuite/btcutil"
 )
 
-func ImportPrivateKey(priv string ,net int) string{
+func ImportPrivateKey(priv string ,net Network) string{
 
 	netParams, err := NetworkToChainConfig(net)
 	if (err != nil) {
