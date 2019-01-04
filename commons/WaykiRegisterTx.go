@@ -8,6 +8,7 @@ import (
 
 type WaykiRegisterTxParams struct {
 	BaseSignTxParams
+	NetType int
 }
 
 func (waykiRegister WaykiRegisterTxParams)SignTX()string{

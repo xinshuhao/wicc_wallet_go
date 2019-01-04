@@ -3,10 +3,17 @@ package wiccwallet
 import (
 	"wiccwallet/commons"
 	"encoding/hex"
+	"encoding/json"
 )
 
-const WAYKI_TESTNET commons.Network = 1
-const WAYKI_MAINTNET commons.Network = 2
+var NetWorkType int=2
+func UseTestNet(useTest bool){
+  if useTest{
+  	NetWorkType=1
+  }else{
+  	NetWorkType=2
+  }
+}
 
 //创建助记词
 func CreateMnemonics() (string){
@@ -19,20 +26,20 @@ func CreateMnemonics() (string){
 }
 
 //助记词转换地址
-func Mnemonic2Address(words string,netType commons.Network)(string){
-	address := commons.GenerateAddress(words,netType)
+func Mnemonic2Address(words string)(string){
+	address := commons.GenerateAddress(words,NetWorkType)
 	return address
 }
 
 //助记词转私钥
-func Mnemonic2PrivateKey(words string,netType  commons.Network)(string){
-	privateKey := commons.GeneratePrivateKey(words,netType)
+func Mnemonic2PrivateKey(words string,)(string){
+	privateKey := commons.GeneratePrivateKey(words,NetWorkType)
 	return privateKey
 }
 
 //私钥转地址
-func PrivateKey2Address(words string,netType  commons.Network)(string){
-	address := commons.ImportPrivateKey(words,netType)
+func PrivateKey2Address(words string)(string){
+	address := commons.ImportPrivateKey(words,NetWorkType)
 	return address
 }
 
@@ -64,15 +71,37 @@ func SignCommonTx(value int64,regid string,toAddr string,height int64, fees int6
 	return hash
 }
 
+type Vote struct {
+	VoteType int
+	PubKey string
+	VoteValue int64
+}
+
+type VoteList struct {
+	voteLists []Vote
+}
+
 //投票交易签名
-func SignDelegateTx(regid string,height int64, fees int64,privateKey string,votes []commons.OperVoteFund) string {
+func SignDelegateTx(regid string,height int64, fees int64,privateKey string,voteListJson string) string {
 	var waykiDelegate commons.WaykiDelegateTxParams
+	var votesStr []Vote
 	waykiDelegate.BaseSignTxParams.PrivateKey=privateKey
 	waykiDelegate.BaseSignTxParams.RegId=regid
 	waykiDelegate.BaseSignTxParams.ValidHeight=height
 	waykiDelegate.BaseSignTxParams.Fees=fees
 	waykiDelegate.BaseSignTxParams.TxType=commons.TX_DELEGATE
 	waykiDelegate.BaseSignTxParams.Version=1
+	json.Unmarshal([]byte(voteListJson), &votesStr)
+	votes :=[]commons.OperVoteFund{}
+	for _, fund := range votesStr {
+		var vote commons.OperVoteFund
+		pk,_:=hex.DecodeString(fund.PubKey)
+		vote.PubKey=pk
+		vote.VoteType=fund.VoteType
+		vote.VoteValue=fund.VoteValue
+		votes= append(votes, vote)
+	}
+
 	waykiDelegate.OperVoteFunds=votes
 	hash:=waykiDelegate.SignTX()
 	return hash

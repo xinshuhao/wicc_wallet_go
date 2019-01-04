@@ -14,15 +14,15 @@ func TestMnemonic(t *testing.T) {
 	mnemonic := "empty regular curve turtle student prize toy accuse develop spike scatter ginger"
 	//seed := bip.NewSeed(mnemonic, "")
 	////fmt.Println(hex.EncodeToString(seed))
-	address := commons.GenerateAddress(mnemonic, WAYKI_MAINTNET)
+	address := commons.GenerateAddress(mnemonic, NetWorkType)
 	fmt.Println("地址"+address)
 }
 
 func TestMnemonicWIF(t *testing.T) {
-	mnemonic := "empty regular curve turtle student prize toy accuse develop spike scatter ginger"
-	privateKey := commons.GeneratePrivateKey(mnemonic, WAYKI_MAINTNET)
+	mnemonic := "club update clog moon crawl ensure message secret tone chef ignore because"
+	privateKey := commons.GeneratePrivateKey(mnemonic, NetWorkType)
 	fmt.Println("私钥"+privateKey)
-	fmt.Println("地址"+commons.ImportPrivateKey(privateKey,WAYKI_MAINTNET))
+	fmt.Println("地址"+commons.ImportPrivateKey(privateKey,NetWorkType))
 }
 
 func TestSignContractTx(t *testing.T) {
@@ -43,18 +43,22 @@ func TestSignContractTx(t *testing.T) {
 
 
 func TestSignDelegateTx(t *testing.T) {
+	//str:=`[{"PubKey":"037da3be88205c0aa12bd2e0a40343417b4550eff0ffae4785b89578536ac5a2f9","VoteType":1,"VoteValue":10000}]`
+   //hash:=SignDelegateTx("25312-1",672429,10000,"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC",str)
+   //fmt.Println(hash)
 	var waykiDelegate commons.WaykiDelegateTxParams
 	waykiDelegate.BaseSignTxParams.PrivateKey="YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
-	waykiDelegate.BaseSignTxParams.ValidHeight=663956
+	waykiDelegate.BaseSignTxParams.ValidHeight=672812
 	waykiDelegate.BaseSignTxParams.Fees=10000
 	waykiDelegate.BaseSignTxParams.RegId="25312-1"
 	waykiDelegate.BaseSignTxParams.TxType=commons.TX_DELEGATE
 	waykiDelegate.BaseSignTxParams.Version=1
 
-	wif,_ := btcutil.DecodeWIF("YAa1wFCfFnZ5bt4hg9MDeDevTMd1Nu874Mn83hEXwtfAL2vkQE9f")
-	key:=wif.PrivKey
+	//wif,_ := btcutil.DecodeWIF("YAa1wFCfFnZ5bt4hg9MDeDevTMd1Nu874Mn83hEXwtfAL2vkQE9f")
+	//key:=wif.PrivKey
+	hex,_:=hex.DecodeString("037da3be88205c0aa12bd2e0a40343417b4550eff0ffae4785b89578536ac5a2f9")
 	delegateList:=[]commons.OperVoteFund{commons.OperVoteFund{
-		commons.MINUS_FUND,key.PubKey().SerializeCompressed(),10000,
+		commons.MINUS_FUND,hex,10000,
 	}}
 	waykiDelegate.OperVoteFunds=delegateList
 
@@ -65,7 +69,7 @@ func TestSignDelegateTx(t *testing.T) {
 func TestSignRegisterTx(t *testing.T) {
 	var waykiRegister commons.WaykiRegisterTxParams
 	waykiRegister.BaseSignTxParams.PrivateKey="Y7W4t1wtXmdojGPeHt23HSipZAykpTzwbng9gghT3ePzMtSx1g6y"
-	waykiRegister.BaseSignTxParams.ValidHeight=663168
+	waykiRegister.BaseSignTxParams.ValidHeight=671151
 	waykiRegister.BaseSignTxParams.Fees=10000
 	waykiRegister.BaseSignTxParams.TxType=commons.TX_REGISTERACCOUNT
 	waykiRegister.BaseSignTxParams.Version=1
@@ -91,13 +95,13 @@ func TestSignTx(t *testing.T) {
 
 	//mnemonic1 :="fragile chalk speed absorb enter weasel hurdle eternal tooth acoustic cost boss"
 	privateKey1 := "Y9XMqNzseQFSK32SvMDNF9J7xz1CQmHRsmY1hMYiqZyTck8pYae3"//commons.GeneratePrivateKey(mnemonic1, WAYKI_TESTNET)
-	srcAddress  := commons.ImportPrivateKey(privateKey1,WAYKI_TESTNET)
+	srcAddress  := commons.ImportPrivateKey(privateKey1,NetWorkType)
 	fmt.Println("私钥1:  "+privateKey1)
 	fmt.Println("地址1:  "+srcAddress)
 
 
 	mnemonic2 := "empty regular curve turtle student prize toy accuse develop spike scatter ginger"
-	privateKey2 := commons.GeneratePrivateKey(mnemonic2, WAYKI_TESTNET)
+	privateKey2 := commons.GeneratePrivateKey(mnemonic2, NetWorkType)
 	destAddress  := "wZujmSBQ7sNhxA7WfEuN46HAyZpw1B8NBA"//commons.ImportPrivateKey(privateKey2,WAYKI_TESTNET)
 	fmt.Println("私钥2:  "+privateKey2)
 	fmt.Println("地址2:  "+destAddress)

@@ -16,11 +16,11 @@ const (
 	TX_DELEGATE
 )
 
-type WaykiVoteType uint32
+
 const (
-	NULL_OPER  WaykiVoteType = iota
-	ADD_FUND   //投票
-	MINUS_FUND //撤销投票
+	NULL_OPER   = iota
+	ADD_FUND    //投票
+	MINUS_FUND  //撤销投票
 )
 
 type WalletAddress struct {
@@ -42,8 +42,13 @@ type BaseSignTxParams struct {
 
 func parseRegId(regId string) []int64 {
 	regidStr := strings.Split(regId, "-")
-	regHeight, _ := strconv.ParseInt(regidStr[0], 10, 64)
-	regIndex, _ := strconv.ParseInt(regidStr[1], 10, 64)
-	regIdArray := []int64{regHeight, regIndex}
-	return regIdArray
+	if len(regidStr) == 2 {
+		regHeight, _ := strconv.ParseInt(regidStr[0], 10, 64)
+		regIndex, _ := strconv.ParseInt(regidStr[1], 10, 64)
+		regIdArray := []int64{regHeight, regIndex}
+		return regIdArray
+	} else {
+		regIdArray := []int64{-0, -0}
+		return regIdArray
+	}
 }

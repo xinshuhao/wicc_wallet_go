@@ -9,7 +9,7 @@ import (
 type WICCNet uint32
 type WalletStatus int64
 type ChangeType uint32
-type Network int16
+
 const (
 	// MainNet represents the main wicc network.
 	MainNet wire.BitcoinNet = 0xff421d1a
@@ -25,9 +25,6 @@ const (
 	HardenedKeyZeroIndex =0x8001869f
 	BIP44Purpose uint32 =  0x8000002C
 	WICCCoinType uint32=99999
-
-  MAINNET  Network = 1
-  TESTNET Network = 2
 )
 
 type MnemonicLanguage string
@@ -42,7 +39,7 @@ const (
 	SPANISH                   = "ES"
 )
 
-func NetworkToChainConfig(net Network) (*chaincfg.Params, error) {
+func NetworkToChainConfig(net int) (*chaincfg.Params, error) {
 	switch net {
 	case 1:
 		return &WaykiTestParams, nil

@@ -7,7 +7,7 @@ import (
 )
 
 type OperVoteFund struct {
-	VoteType WaykiVoteType
+	VoteType int
 	PubKey []byte
 	VoteValue int64
 }
@@ -37,7 +37,6 @@ func (waykidelegate WaykiDelegateTxParams)SignTX()string{
 	ss9:=signDelegateTX(waykidelegate)
 	bytesBuffer.Write(EncodeInOldWay(int64(len(ss9))))
 	bytesBuffer.Write(ss9)
-	//println(hex.EncodeToString(bytesBuffer.Bytes()))
 	signHex:=hex.EncodeToString(bytesBuffer.Bytes())
 	return signHex
 }
