@@ -77,10 +77,6 @@ type Vote struct {
 	VoteValue int64
 }
 
-type VoteList struct {
-	voteLists []Vote
-}
-
 //投票交易签名
 func SignDelegateTx(regid string,height int64, fees int64,privateKey string,voteListJson string) string {
 	var waykiDelegate commons.WaykiDelegateTxParams
