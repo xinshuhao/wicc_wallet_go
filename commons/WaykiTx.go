@@ -4,6 +4,7 @@ import (
 	"crypto/ecdsa"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 type WaykiTxType uint32
@@ -16,9 +17,8 @@ const (
 	TX_DELEGATE
 )
 
-
 const (
-	NULL_OPER   = iota
+	NULL_OPER  = iota
 	ADD_FUND    //投票
 	MINUS_FUND  //撤销投票
 )
@@ -42,13 +42,12 @@ type BaseSignTxParams struct {
 
 func parseRegId(regId string) []int64 {
 	regidStr := strings.Split(regId, "-")
-	if len(regidStr) == 2 {
-		regHeight, _ := strconv.ParseInt(regidStr[0], 10, 64)
-		regIndex, _ := strconv.ParseInt(regidStr[1], 10, 64)
-		regIdArray := []int64{regHeight, regIndex}
-		return regIdArray
-	} else {
-		regIdArray := []int64{-0, -0}
-		return regIdArray
+	if len(regidStr) < 2 {
+		fmt.Errorf("invalid RegId")
 	}
+	regHeight, _ := strconv.ParseInt(regidStr[0], 10, 64)
+	regIndex, _ := strconv.ParseInt(regidStr[1], 10, 64)
+	regIdArray := []int64{regHeight, regIndex}
+	return regIdArray
+
 }

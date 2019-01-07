@@ -5,6 +5,7 @@ import (
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/btcsuite/btcutil"
 	"encoding/hex"
+	"fmt"
 )
 
 type WaykiCommonTxParams struct {
@@ -22,7 +23,11 @@ func (waykicommon WaykiCommonTxParams)SignTX()string{
 	bytesBuffer.Write(EncodeInOldWay(4))
 	bytesBuffer.Write(EncodeInOldWay(regId[0]))
 	bytesBuffer.Write(EncodeInOldWay(regId[1]))
-	ss7,_,_:= base58.CheckDecode(waykicommon.DestAddress)
+	ss7,_,error:= base58.CheckDecode(waykicommon.DestAddress)
+	if error!=nil{
+		fmt.Errorf("invalid DestAddress")
+		return ""
+	}
 	bytesBuffer.Write(EncodeInOldWay(int64(len(ss7))))
 	bytesBuffer.Write(ss7)
 	bytesBuffer.Write(EncodeInOldWay(waykicommon.Fees))

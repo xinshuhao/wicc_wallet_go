@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"github.com/btcsuite/btcutil"
+	"fmt"
 )
 
 type WaykiRegisterTxParams struct {
@@ -12,7 +13,11 @@ type WaykiRegisterTxParams struct {
 }
 
 func (waykiRegister WaykiRegisterTxParams)SignTX()string{
-	wif,_ := btcutil.DecodeWIF(waykiRegister.PrivateKey)
+	wif,error := btcutil.DecodeWIF(waykiRegister.PrivateKey)
+	if error!=nil{
+		fmt.Errorf("invalid PrivateKey")
+		return ""
+	}
 	bytesBuffer := bytes.NewBuffer([]byte{})
 	bytesBuffer.WriteByte(byte(waykiRegister.TxType))
 	bytesBuffer.Write(EncodeInOldWay(waykiRegister.Version))

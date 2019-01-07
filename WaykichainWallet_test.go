@@ -1,4 +1,4 @@
-package wiccwallet
+package wicc_wallet_go
 
 import (
 	"testing"
