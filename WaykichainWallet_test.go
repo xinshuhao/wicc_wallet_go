@@ -44,8 +44,13 @@ func TestSignContractTx(t *testing.T) {
 
 func TestSignDelegateTx(t *testing.T) {
 	//str:=`[{"PubKey":"037da3be88205c0aa12bd2e0a40343417b4550eff0ffae4785b89578536ac5a2f9","VoteType":1,"VoteValue":10000}]`
-   //hash:=SignDelegateTx("25312-1",672429,10000,"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC",str)
-   //fmt.Println(hash)
+	votes:=[][]byte{}
+	vote:= Vote{1,"037da3be88205c0aa12bd2e0a40343417b4550eff0ffae4785b89578536ac5a2f9",10000}
+	voteListByte,_:=vote.MarshalJSON()
+	votes=append(votes, voteListByte)
+    hash:=SignDelegateTx("25312-1",694747,10000,
+   	"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC","")
+   fmt.Println(hash)
 	var waykiDelegate commons.WaykiDelegateTxParams
 	waykiDelegate.BaseSignTxParams.PrivateKey="YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
 	waykiDelegate.BaseSignTxParams.ValidHeight=672812
@@ -62,8 +67,8 @@ func TestSignDelegateTx(t *testing.T) {
 	}}
 	waykiDelegate.OperVoteFunds=delegateList
 
-	hash:=waykiDelegate.SignTX()
-	println(hash)
+	//hash:=waykiDelegate.SignTX()
+	//println(hash)
 }
 
 func TestSignRegisterTx(t *testing.T) {
@@ -81,8 +86,8 @@ func TestSignCommonTx(t *testing.T) {
 	var waykicommon commons.WaykiCommonTxParams
 	waykicommon.Value=10000
 	waykicommon.DestAddress="wZujmSBQ7sNhxA7WfEuN46HAyZpw1B8NBA"
-	waykicommon.BaseSignTxParams.PrivateKey="Y9XMqNzseQFSK32SvMDNF9J7xz1CQmHRsmY1hMYiqZyTck8pYae3"
-	waykicommon.BaseSignTxParams.RegId="30947-1"
+	waykicommon.BaseSignTxParams.PrivateKey="YAbSocb2LgP7EYBHZ9zR4FzZ7bh9TZ9VhhUtvEFEVuNthYM6yK29"
+	waykicommon.BaseSignTxParams.RegId="4844-2"
 	waykicommon.BaseSignTxParams.ValidHeight=662788
 	waykicommon.BaseSignTxParams.Fees=10000
 	waykicommon.BaseSignTxParams.TxType=commons.TX_COMMON
