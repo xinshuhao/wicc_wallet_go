@@ -6,8 +6,8 @@ import (
 	"wicc_wallet_go/commons"
 	"bytes"
 	"encoding/hex"
-	"btcutil"
-	"btcutil/base58"
+	"github.com/btcsuite/btcutil/base58"
+	"github.com/btcsuite/btcutil"
 )
 
 func TestMnemonic(t *testing.T) {
